@@ -1,0 +1,540 @@
+{
+	"name": "Henkuhisser",
+	"scopeName": "source.henkuhisser",
+	"patterns": [
+		{ "include": "#items" },
+		{ "include": "#comments" },
+		{ "include": "#illegal" }
+	],
+	"repository": {
+		"items": {
+			"patterns": [
+				{ "include": "#attributes" },
+				{ "include": "#use-item" },
+				{ "include": "#enum-declaration" },
+				{ "include": "#struct-declaration" },
+				{ "include": "#trait-declaration" },
+				{ "include": "#impl-declaration" },
+				{ "include": "#fn-declaration" },
+				{ "include": "#constructor" },
+				{ "include": "#expressions" }
+			]
+		},
+
+		"comments": {
+            "patterns": [
+                {
+                    "name": "comment.line.documentation.henkuhisser",
+                    "match": "^\\s*///.*"
+                },
+                {
+                    "name": "comment.line.henkuhisser",
+                    "match": "//.*"
+                },
+				{ "include": "#block-comments" }
+			]
+		},
+		"block-comments": {
+			"patterns": [
+				{
+					"name": "comment.block.henkuhisser",
+					"begin": "/\\*",
+					"end": "\\*/",
+					"patterns": [
+						{ "include": "#block-comments" }
+					]
+				}
+			]
+		},
+
+		"attributes": {
+			"patterns": [
+				{
+					"name": "meta.attribute.henkuhisser",
+					"begin": "(#)",
+					"beginCaptures": {
+						"1": { "name": "keyword.attribute.henkuhisser" }
+					},
+					"end": "\\s|#",
+					"patterns": [
+						{ "include": "#comments" },
+						{
+							"name": "keyword.control.attribute.henkuhisser",
+							"match": "\\bif\\b"
+						},
+						{
+							"name": "keyword.special.attribute.henkuhisser",
+							"match": "\\b(debug|clone|test)\\b"
+						},
+						{ "include": "#attribute-content" }
+					]
+				}
+			]
+		},
+		"attribute-content": {
+			"patterns": [
+				{
+					"name": "meta.attribute.content.henkuhisser",
+					"match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+					"captures": {
+						"1": { "name": "variable.attribute.henkuhisser" }
+					}
+				},
+				{
+					"name": "meta.attribute.call.henkuhisser",
+					"begin": "(\\()",
+					"beginCaptures": {
+						"1": { "name": "punctuation.definition.arguments.begin.henkuhisser" }
+					},
+					"end": "(\\))",
+					"endCaptures": {
+						"1": { "name": "punctuation.definition.arguments.end.henkuhisser" }
+					},
+					"patterns": [
+						{ "include": "#comments" },
+						{ "include": "#attribute-content" }
+					]
+				},
+				{ "include": "#strings" },
+				{ "include": "#punctuation-comma" }
+			]
+		},
+		
+		"use-item": {
+			"patterns": [
+				{
+					"name": "meta.use.henkuhisser",
+					"begin": "\\b(use)\\b",
+					"beginCaptures": {
+						"1": { "name": "keyword.other.use.henkuhisser" }
+					},
+					"end": "(?=\\n)",
+					"patterns": [
+						{ "include": "#comments" },
+						{ "include": "#use-item-content" }
+					]
+				}
+			]
+		},
+		"use-item-content": {
+			"patterns": [
+				{
+					"name": "meta.use.content.henkuhisser",
+					"match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)(\\.)",
+					"captures": {
+						"1": { "name": "entity.name.namespace.henkuhisser" },
+						"2": { "name": "punctuation.separator.namespace.henkuhisser" }
+					}
+				},
+				{
+					"name": "meta.use.content.henkuhisser",
+					"match": "\\b([A-Z][a-zA-Z0-9_]*)\\b",
+					"captures": {
+						"1": { "name": "entity.name.type.henkuhisser" }
+					}
+				},
+				{
+					"name": "meta.use.content.henkuhisser",
+					"match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+					"captures": {
+						"1": { "name": "entity.name.function.henkuhisser" }
+					}
+				},
+				{
+					"name": "meta.use.block.henkuhisser",
+					"begin": "(\\{)",
+					"beginCaptures": {
+						"1": { "name": "punctuation.definition.block.henkuhisser" }
+					},
+					"end": "(\\})",
+					"endCaptures": {
+						"1": { "name": "punctuation.definition.block.henkuhisser" }
+					},
+					"patterns": [
+						{ "include": "#comments" },
+						{ "include": "#use-item-content" }
+					]
+				},
+				{
+					"name": "keyword.use.self.henkuhisser",
+					"match": "\\."
+				},
+				{ "include": "#identifiers" },
+				{ "include": "#punctuation-comma" }
+			]
+		},
+
+		"enum-declaration": {
+			"patterns": [
+				{
+					"name": "meta.enum.declaration.henkuhisser",
+					"begin": "\\b(enum)\\b",
+					"beginCaptures": {
+						"1": { "name": "keyword.other.enum.henkuhisser" }
+					},
+					"end": "\n",
+					"patterns": [
+						{ "include": "#comments" },
+						{
+							"name": "entity.name.type.enum.henkuhisser",
+							"match": "[a-zA-Z_][a-zA-Z0-9_]*"
+						},
+						{ "include": "#generic-params" }
+					]
+				}
+			]
+		},
+		"struct-declaration": {
+			"patterns": [
+				{
+					"name": "meta.struct.declaration.henkuhisser",
+					"begin": "\\b(struct)\\b",
+					"beginCaptures": {
+						"1": { "name": "keyword.other.struct.henkuhisser" }
+					},
+					"end": "\n",
+					"patterns": [
+						{ "include": "#comments" },
+						{ "include": "#struct-modifier" },
+						{
+							"name": "entity.name.type.struct.henkuhisser",
+							"match": "[a-zA-Z_][a-zA-Z0-9_]*"
+						},
+						{ "include": "#generic-params" }
+					]
+				}
+			]
+		},
+		"struct-modifier": {
+			"patterns": [
+				{
+					"name": "meta.struct.modifier.henkuhisser",
+					"begin": "(\\()",
+					"beginCaptures": {
+						"1": { "name": "punctuation.definition.struct-modifier.begin.henkuhisser" }
+					},
+					"end": "(\\))",
+					"endCaptures": {
+						"1": { "name": "punctuation.definition.struct-modifier.end.henkuhisser" }
+					},
+					"patterns": [
+						{ "include": "#comments" },
+						{
+							"name": "keyword.other.struct-modifier.henkuhisser",
+							"match": "\\bvalue\\b"
+						},
+						{ "include": "#punctuation-comma" },
+						{
+							"name": "invalid.illegal.struct-modifier.henkuhisser",
+							"match": "\\w"
+						}
+					]
+				}
+			]
+		},
+		"trait-declaration": {
+			"patterns": [
+				{
+					"name": "meta.trait.declaration.henkuhisser",
+					"begin": "\\b(trait)\\b",
+					"beginCaptures": {
+						"1": { "name": "keyword.other.trait.henkuhisser" }
+					},
+					"end": "\n",
+					"patterns": [
+						{ "include": "#comments" },
+						{
+							"name": "entity.name.type.trait.henkuhisser",
+							"match": "[a-zA-Z_][a-zA-Z0-9_]*"
+						},
+						{ "include": "#generic-params" }
+					]
+				}
+			]
+		},
+		"impl-declaration": {
+			"patterns": [
+				{
+					"name": "meta.impl.declaration.henkuhisser",
+					"begin": "\\b(impl)\\b",
+					"beginCaptures": {
+						"1": { "name": "keyword.other.impl.henkuhisser" }
+					},
+					"end": "\n",
+					"patterns": [
+						{ "include": "#comments" },
+						{
+							"name": "entity.name.type.impl.henkuhisser",
+							"match": "[a-zA-Z_][a-zA-Z0-9_]*"
+						},
+						{ "include": "#generic-params" }
+					]
+				}
+			]
+		},
+		"fn-declaration": {
+			"patterns": [
+				{
+					"name": "meta.fn.declaration.henkuhisser",
+					"begin": "\\b(fn)\\b",
+					"beginCaptures": {
+						"1": { "name": "keyword.other.fn.henkuhisser" }
+					},
+					"end": "\n|(:)",
+					"endCaptures": {
+						"1": { "name": "punctuation.section.function.begin" }
+					},
+					"patterns": [
+						{ "include": "#comments" },
+						{
+							"name": "entity.name.type.henkuhisser",
+							"match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
+						},
+						{
+							"name": "entity.name.function.fn.henkuhisser",
+							"match": "[a-zA-Z_][a-zA-Z0-9_]*"
+						},
+						{ "include": "#generic-params" },
+						{ "include": "#fn-params" },
+						{ "include": "#fn-return-type" }
+					]
+				}
+			]
+		},
+		"constructor": {
+			"patterns": [
+				{
+					"name": "meta.struct.constructor.henkuhisser",
+					"begin": "\\b(?<!\\.)(new)\\b",
+					"beginCaptures": {
+						"1": { "name": "storage.type.henkuhisser" }
+					},
+					"end": "\n",
+					"patterns": [
+						{ "include": "#comments" },
+						{ "include": "#fn-params" }
+					]
+				}
+			]
+		},
+
+		"fn-params": {
+			"patterns": [
+				{
+					"name": "meta.function.parameters.henkuhisser",
+					"begin": "\\(",
+					"beginCaptures": {
+						"0": { "name": "punctuation.definition.parameters.begin.henkuhisser" }
+					},
+					"end": "\\)",
+					"endCaptures": {
+						"0": { "name": "punctuation.definition.parameters.end.henkuhisser" }
+					},
+					"patterns": [
+						{ "include": "#comments" },
+						{ "include": "#expressions" }
+					]
+				}
+			]
+		},
+		"fn-return-type": {
+			"patterns": [
+				{
+					"name": "meta.function.return-type.henkuhisser",
+					"begin": "(=>)",
+					"beginCaptures": {
+						"1": { "name": "keyword.operator.type.annotation.henkuhisser" }
+					},
+					"end": "(?=\n|:)",
+					"patterns": [
+						{ "include": "#comments" },
+						{ "include": "#types" }
+					]
+				}
+			]
+		},
+		"generic-params": {
+			"patterns": [
+				{
+					"name": "meta.type.parameters.henkuhisser",
+					"begin": "<",
+					"beginCaptures": {
+						"0": { "name": "punctuation.definition.typeparameters.begin.henkuhisser" }
+					},
+					"end": ">",
+					"endCaptures": {
+						"0": { "name": "punctuation.definition.typeparameters.end.henkuhisser" }
+					},
+		
+					"patterns": [
+						{ "include": "#comments" },
+						{
+							"name": "entity.name.type.generic.henkuhisser",
+							"match": "[a-zA-Z_][a-zA-Z0-9_]*"
+						},
+						{ "include": "#punctuation-comma" }
+					]
+				}
+			]
+		},
+
+		"expressions": {
+			"patterns": [
+				{ "include": "#keywords" },
+				{ "include": "#strings" },
+				{ "include": "#numbers" },
+				{ "include": "#identifiers" },
+				{ "include": "#punctuation" },
+				{ "include": "#html" }
+			]
+		},
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control.henkuhisser",
+					"match": "\\b(if|then|else|match|while|for|in|loop|return)\\b"
+				},
+				{
+					"name": "keyword.other.henkuhisser",
+					"match": "\\b(fn|let|print|assert|self|static|new)\\b"
+				}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.double.henkuhisser",
+			"begin": "\"",
+			"beginCaptures": {
+				"0": { "name": "punctuation.definition.string.begin.henkuhisser" }
+			},
+			"end": "\"",
+			"endCaptures": {
+				"0": { "name": "punctuation.definition.string.end.henkuhisser" }
+			},
+			"patterns": [
+				{
+					"name": "constant.character.escape.henkuhisser",
+					"match": "\\\\."
+				},
+				{
+					"name": "meta.string.interpolated.henkuhisser",
+					"begin": "\\$\\{",
+					"beginCaptures": {
+						"0": { "name": "punctuation.definition.template-expression.begin.henkuhisser" }
+					},
+					"contentName": "meta.embedded.line.henkuhisser",
+					"end": "\\}",
+					"endCaptures": {
+						"0": { "name": "punctuation.definition.template-expression.end.henkuhisser" }
+					},
+					"patterns": [
+						{ "include": "#expressions" }
+					]
+				},
+				{
+					"name": "meta.string.interpolated.henkuhisser",
+					"match": "(\\$)([a-zA-Z_][a-zA-Z0-9_]*)",
+					"captures": {
+						"1": { "name": "punctuation.definition.template-expression.begin.henkuhisser" },
+						"2": { "name": "variable.other.henkuhisser" }
+					}
+				}
+			]
+		},
+		"numbers": {
+			"patterns": [
+				{
+					"name": "constant.numeric.henkuhisser",
+					"match": "\\b(0x[\\da-f]+\\b|\\d+(\\.\\d+)?)"
+				}
+			]
+		},
+		"identifiers": {
+			"patterns": [
+				{ "include": "#types" },
+				{
+					"name": "entity.name.function.henkuhisser",
+					"match": "\\b[a-zA-Z][a-zA-Z0-9_]*(?=\\()"
+				},
+				{
+					"name": "variable.other.henkuhisser",
+					"match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+				}
+			]
+		},
+		"punctuation": {
+			"patterns": [
+				{ "include": "#punctuation-comma" }
+			]
+		},
+		"html": {
+			"patterns": [
+				{
+					"name": "meta.tag.henkuhisser",
+					"begin": "(\\\\)([a-zA-Z0-9_]+)\\b",
+					"beginCaptures": {
+						"1": { "name": "punctuation.definition.tag.begin.henkuhisser" },
+						"2": { "name": "entity.name.tag.henkuhisser" }
+					},
+					"end": "\n|(?=\\\\)",
+					"patterns": [
+						{ "include": "#html-attributes" },
+						{ "include": "#comments" },
+						{ "include": "#expressions" }
+					]
+				}
+			]
+		},
+		"html-attributes": {
+			"patterns": [
+				{
+					"name": "meta.tag.attributes.henkuhisser",
+					"begin": "\\{",
+					"beginCaptures": {
+						"0": { "name": "punctuation.definition.tag.begin.henkuhisser" }
+					},
+					"end": "\\}",
+					"endCaptures": {
+						"0": { "name": "punctuation.definition.tag.end.henkuhisser" }
+					},
+					"patterns": [
+						{ "include": "#comments" },
+						{ "include": "#expressions" }
+					]
+				}
+			]
+		},
+
+		"types": {
+			"patterns": [
+				{
+					"comment": "special types",
+					"name": "entity.name.type.henkuhisser",
+					"match": "\\b(str|(i|u)(8|16|32|64))\\b"
+				},
+				{
+					"name": "variable.language.self",
+					"match": "\\bSelf\\b"
+				},
+				{
+					"name": "entity.name.type.henkuhisser",
+					"match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
+				}
+			]
+		},
+		
+
+		"punctuation-comma": {
+			"name": "punctuation.separator.comma.ts",
+			"match": ","
+		},
+
+		"illegal": {
+			"patterns": [
+				{
+					"name": "invalid.illegal.henkuhisser",
+					"match": ";"
+				}
+			]
+		}
+	}
+}

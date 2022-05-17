@@ -1,0 +1,25 @@
+{
+    "name": "henkuhisser-vscode",
+    "displayName": "henkuhisser-vscode",
+    "description": "",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.67.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "henkuhisser",
+            "aliases": ["Henkuhisser", "henkuhisser"],
+            "extensions": [".hnk"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "henkuhisser",
+            "scopeName": "source.henkuhisser",
+            "path": "./syntaxes/henkuhisser.tmLanguage.json"
+        }]
+    }
+}
