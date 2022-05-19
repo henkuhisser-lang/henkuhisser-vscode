@@ -128,16 +128,20 @@
 				},
 				{
 					"name": "meta.use.content.henkuhisser",
-					"match": "\\b([A-Z][a-zA-Z0-9_]*)\\b",
+					"match": "\\b([A-Z][a-zA-Z0-9_]*)\\b|(\\`)[A-Z][^\\`]*(\\`)",
 					"captures": {
-						"1": { "name": "entity.name.type.henkuhisser" }
+						"1": { "name": "entity.name.type.henkuhisser" },
+						"2": { "name": "punctuation.name.type.begin.henkuhisser" },
+						"3": { "name": "punctuation.name.type.end.henkuhisser" }
 					}
 				},
 				{
 					"name": "meta.use.content.henkuhisser",
-					"match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+					"match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b|(\\`)[^\\`]*?(\\`)",
 					"captures": {
-						"1": { "name": "entity.name.function.henkuhisser" }
+						"1": { "name": "entity.name.function.henkuhisser" },
+						"2": { "name": "punctuation.name.function.begin.henkuhisser" },
+						"3": { "name": "punctuation.name.function.end.henkuhisser" }
 					}
 				},
 				{
@@ -177,7 +181,11 @@
 						{ "include": "#comments" },
 						{
 							"name": "entity.name.type.enum.henkuhisser",
-							"match": "[a-zA-Z_][a-zA-Z0-9_]*"
+							"match": "\\b[a-zA-Z][a-zA-Z0-9_]*\\b|(\\`)[^\\`]*(\\`)",
+							"captures": {
+								"1": { "name": "punctuation.name.type.begin.henkuhisser" },
+								"2": { "name": "punctuation.name.type.end.henkuhisser" }
+							}
 						},
 						{ "include": "#generic-params" }
 					]
@@ -198,7 +206,11 @@
 						{ "include": "#struct-modifier" },
 						{
 							"name": "entity.name.type.struct.henkuhisser",
-							"match": "[a-zA-Z_][a-zA-Z0-9_]*"
+							"match": "\\b[a-zA-Z][a-zA-Z0-9_]*\\b|(\\`)[^\\`]*(\\`)",
+							"captures": {
+								"1": { "name": "punctuation.name.type.begin.henkuhisser" },
+								"2": { "name": "punctuation.name.type.end.henkuhisser" }
+							}
 						},
 						{ "include": "#generic-params" }
 					]
@@ -245,7 +257,11 @@
 						{ "include": "#comments" },
 						{
 							"name": "entity.name.type.trait.henkuhisser",
-							"match": "[a-zA-Z_][a-zA-Z0-9_]*"
+							"match": "\\b[a-zA-Z][a-zA-Z0-9_]*\\b|(\\`)[^\\`]*(\\`)",
+							"captures": {
+								"1": { "name": "punctuation.name.type.begin.henkuhisser" },
+								"2": { "name": "punctuation.name.type.end.henkuhisser" }
+							}
 						},
 						{ "include": "#generic-params" }
 					]
@@ -263,10 +279,7 @@
 					"end": "\n",
 					"patterns": [
 						{ "include": "#comments" },
-						{
-							"name": "entity.name.type.impl.henkuhisser",
-							"match": "[a-zA-Z_][a-zA-Z0-9_]*"
-						},
+						{ "include": "#types" },
 						{ "include": "#generic-params" }
 					]
 				}
@@ -286,14 +299,7 @@
 					},
 					"patterns": [
 						{ "include": "#comments" },
-						{
-							"name": "entity.name.type.henkuhisser",
-							"match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
-						},
-						{
-							"name": "entity.name.function.fn.henkuhisser",
-							"match": "[a-zA-Z_][a-zA-Z0-9_]*"
-						},
+						{ "include": "#identifiers" },
 						{ "include": "#generic-params" },
 						{ "include": "#fn-params" },
 						{ "include": "#fn-return-type" }
@@ -370,7 +376,11 @@
 						{ "include": "#comments" },
 						{
 							"name": "entity.name.type.generic.henkuhisser",
-							"match": "[a-zA-Z_][a-zA-Z0-9_]*"
+							"match": "\\b[a-zA-Z][a-zA-Z0-9_]*\\b|(\\`)[^\\`]*(\\`)",
+							"captures": {
+								"1": { "name": "punctuation.name.type.begin.henkuhisser" },
+								"2": { "name": "punctuation.name.type.end.henkuhisser" }
+							}
 						},
 						{ "include": "#punctuation-comma" }
 					]
@@ -432,10 +442,12 @@
 				},
 				{
 					"name": "meta.string.interpolated.henkuhisser",
-					"match": "(\\$)([a-zA-Z_][a-zA-Z0-9_]*)",
+					"match": "(\\$)([a-zA-Z_][a-zA-Z0-9_]*|(\\`)[^\\`]*(\\`))",
 					"captures": {
 						"1": { "name": "punctuation.definition.template-expression.begin.henkuhisser" },
-						"2": { "name": "variable.other.henkuhisser" }
+						"2": { "name": "variable.other.henkuhisser" },
+						"3": { "name": "punctuation.name.type.begin.henkuhisser" },
+						"4": { "name": "punctuation.name.type.end.henkuhisser" }
 					}
 				}
 			]
@@ -453,11 +465,19 @@
 				{ "include": "#types" },
 				{
 					"name": "entity.name.function.henkuhisser",
-					"match": "\\b[a-zA-Z][a-zA-Z0-9_]*(?=\\()"
+					"match": "(\\b[a-zA-Z][a-zA-Z0-9_]*\\b|(\\`)[^\\`]*?(\\`))(?=\\s*\\()",
+					"captures": {
+						"2": { "name": "punctuation.name.function.begin.henkuhisser" },
+						"3": { "name": "punctuation.name.function.end.henkuhisser" }
+					}
 				},
 				{
 					"name": "variable.other.henkuhisser",
-					"match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+					"match": "\\b[a-zA-Z][a-zA-Z0-9_]*\\b|(\\`)[^\\`]*(\\`)",
+					"captures": {
+						"1": { "name": "punctuation.name.variable.begin.henkuhisser" },
+						"2": { "name": "punctuation.name.variable.end.henkuhisser" }
+					}
 				}
 			]
 		},
@@ -517,7 +537,11 @@
 				},
 				{
 					"name": "entity.name.type.henkuhisser",
-					"match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
+					"match": "\\b[A-Z][a-zA-Z0-9_]*\\b|(\\`)[A-Z][^\\`]*(\\`)",
+					"captures": {
+						"1": { "name": "punctuation.name.type.begin.henkuhisser" },
+						"2": { "name": "punctuation.name.type.end.henkuhisser" }
+					}
 				}
 			]
 		},
